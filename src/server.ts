@@ -3,6 +3,7 @@ import http from "http";
 import mongoose from "mongoose";
 import { config } from "./config/config";
 import Logging from "./library/Logging";
+import authorRoutes from "./routes/Author";
 
 const router = express();
 
@@ -40,18 +41,25 @@ const StartServer = () => {
 
   /** Rules of our API */
   router.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    );
 
-    if (req.method == 'OPTIONS') {
-        res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
-        return res.status(200).json({});
+    if (req.method == "OPTIONS") {
+      res.header(
+        "Access-Control-Allow-Methods",
+        "PUT, POST, PATCH, DELETE, GET"
+      );
+      return res.status(200).json({});
     }
 
     next();
-});
+  });
 
   /** Routes */
+  router.use("/authors", authorRoutes);
 
   /** Healthcheck */
   router.get("/ping", (req, res, next) =>
